@@ -1,3 +1,4 @@
+;; [[file:~/ghq/github.com/rfnash/itsy-linux/README.org::*macros.asm][macros.asm:1]]
 ; Itsy Forth - Macros
 ;   Written by John Metcalf
 ;   Commentary by Mike Adams
@@ -217,3 +218,4 @@
 ; into itsy.asm in its place.
 ;
 ;--------------------------------------------------------------------------
+;; macros.asm:1 ends here

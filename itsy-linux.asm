@@ -1,3 +1,4 @@
+;; [[file:~/ghq/github.com/rfnash/itsy-linux/README.org::*itsy-linux.asm][itsy-linux.asm:1]]
 ; nasm itsy-linux.asm -fbin -l itsy-linux.lst -o itsy-linux && chmod +x itsy-linux
 
 %define link 0
@@ -426,3 +427,4 @@ intdone dd xt_branch
 freemem:
 
 filesize   equ   $ - $$
+;; itsy-linux.asm:1 ends here

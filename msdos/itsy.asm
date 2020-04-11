@@ -1,3 +1,4 @@
+;; [[file:~/ghq/github.com/rfnash/itsy-linux/README.org::*itsy.asm][itsy.asm:1]]
 ; Itsy Forth
 ;    Written by John Metcalf
 ;    Commentary by John Metcalf and Mike Adams
@@ -1030,3 +1031,4 @@ freemem:
 ; it's lacking a number of key critical words that make it nigh unto
 ; impossible to do anything useful, but this just goes to show just
 ; how small a functioning Forth system can be made.
+;; itsy.asm:1 ends here

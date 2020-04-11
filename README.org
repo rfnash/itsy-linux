@@ -42,7 +42,7 @@ clean:
 	rm itsy-linux.lst itsy-linux
 #+end_src
 * itsy-linux.asm
-#+begin_src asm :tangle itsy-linux.asm
+#+begin_src asm :tangle itsy-linux.asm :comments link
   ; nasm itsy-linux.asm -fbin -l itsy-linux.lst -o itsy-linux && chmod +x itsy-linux
 
   %define link 0
@@ -474,7 +474,7 @@ clean:
 #+end_src
 * msdos
 ** itsy.asm
-#+begin_src asm :mkdirp yes :tangle msdos/itsy.asm
+#+begin_src asm :mkdirp yes :tangle msdos/itsy.asm :comments link
   ; Itsy Forth
   ;    Written by John Metcalf
   ;    Commentary by John Metcalf and Mike Adams
@@ -1509,7 +1509,7 @@ clean:
   ; how small a functioning Forth system can be made.
 #+end_src
 ** macros.asm
-#+begin_src asm :mkdirp yes :tangle msdos/macros.asm
+#+begin_src asm :mkdirp yes :tangle msdos/macros.asm :comments link
   ; Itsy Forth - Macros
   ;   Written by John Metcalf
   ;   Commentary by Mike Adams
