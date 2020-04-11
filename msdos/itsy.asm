@@ -1030,4 +1030,3 @@ freemem:
 ; it's lacking a number of key critical words that make it nigh unto
 ; impossible to do anything useful, but this just goes to show just
 ; how small a functioning Forth system can be made.
-
