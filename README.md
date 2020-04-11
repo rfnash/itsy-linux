@@ -15,7 +15,7 @@ Resulting binary has very impressive size (978 bytes) and can be used to bootstr
 
 Original itsy code is producing .com files and can be found in "msdos" directory of this repository.
 
-I ported it to 32-bit linux code. Sample session:
+kt97679 ported it to 32-bit linux code. Sample session:
 
 <pre>
 $ make
