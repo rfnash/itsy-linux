@@ -273,7 +273,7 @@
 
 ;--------------------------------------------------------------------------
 ;
-; That's the last of the macros. 
+; That's the last of the macros.
 ;
 ;--------------------------------------------------------------------------
 
@@ -329,27 +329,27 @@ stack0  equ -256
 
 ; abort - ( -- ) initialise Itsy then jump to interpret
         primitive 'abort',abort
-        mov ax,word[val_number_t_i_b]  ; Load AX with the value contained
-                                       ; in the data field of #tib (which
-                                       ; was pre-defined above as 0).
-        mov word[val_to_in],ax         ; Save the same number to >in.
-        xor bp,bp                      ; Clear the bp register, which is going
-                                       ; to be used as the return stack
-                                       ; pointer. Since it'll first be
-                                       ; decremented when a value is pushed
-                                       ; onto it, this means that the first
-                                       ; value pushed onto the return stack
-                                       ; will be stored at 0FFFEh and 0FFFFh,
-                                       ; the very end of memory space, and
-                                       ; the stack will grow downward from
-                                       ; there.
-        mov word[val_state],bp         ; Clear the value of state.
-        mov sp,stack0                  ; Set the stack pointer to the value
-                                       ; defined above.
-        mov si,xt_interpret+2          ; Initialize Itsy's instruction pointer
-                                       ; to the outer interpreter loop.
-        jmp next                       ; Jump to the inner interpreter and
-                                       ; actually start running Itsy.
+        mov ax,word[val_number_t_i_b]   ; Load AX with the value contained
+                                        ; in the data field of #tib (which
+                                        ; was pre-defined above as 0).
+        mov word[val_to_in],ax          ; Save the same number to >in.
+        xor bp,bp                       ; Clear the bp register, which is going
+                                        ; to be used as the return stack
+                                        ; pointer. Since it'll first be
+                                        ; decremented when a value is pushed
+                                        ; onto it, this means that the first
+                                        ; value pushed onto the return stack
+                                        ; will be stored at 0FFFEh and 0FFFFh,
+                                        ; the very end of memory space, and
+                                        ; the stack will grow downward from
+                                        ; there.
+        mov word[val_state],bp          ; Clear the value of state.
+        mov sp,stack0                   ; Set the stack pointer to the value
+                                        ; defined above.
+        mov si,xt_interpret+2           ; Initialize Itsy's instruction pointer
+                                        ; to the outer interpreter loop.
+        jmp next                        ; Jump to the inner interpreter and
+                                        ; actually start running Itsy.
 
 ; -------------------
 ; Compilation
@@ -447,25 +447,25 @@ stack0  equ -256
 
 ; = - ( x y -- flag ) return true if x=y
         primitive '=',equals
-        pop ax     ; Get the "x" value into a register.
-        sub bx,ax  ; Perform BX-AX (or y-x)and leave result in BX. If x and
-                   ; y are equal, this will result in a 0 in BX. But a zero
-                   ; is a false flag in just about all Forth systems, and we
-                   ; want a TRUE flag if the numbers are equal. So...
-        sub bx,1   ; Subtract 1 from it. If we had a zero before, now we've
-                   ; got a -1 (or 0ffffh), and a carry flag was generated.
-                   ; Any other value in BX will not generate a carry.
-        sbb bx,bx  ; This has the effect of moving the carry bit into the BX
-                   ; register. So, if the numbers were not equal, then the
-                   ; "sub bx,1" didn't generate a carry, so the result will
-                   ; be a 0 in the BX (numbers were not equal, result is
-                   ; false). If the original numbers on the stack were equal,
-                   ; though, then the carry bit was set and then copied
-                   ; into the BX register to act as our true flag.
-                   ; This may seem a bit cryptic, but it produces smaller
-                   ; code and runs faster than a bunch of conditional jumps
-                   ; and immediate loads would.
-        jmp next   ; Go do the next word.
+        pop ax      ; Get the "x" value into a register.
+        sub bx,ax   ; Perform BX-AX (or y-x)and leave result in BX. If x and
+                    ; y are equal, this will result in a 0 in BX. But a zero
+                    ; is a false flag in just about all Forth systems, and we
+                    ; want a TRUE flag if the numbers are equal. So...
+        sub bx,1    ; Subtract 1 from it. If we had a zero before, now we've
+                    ; got a -1 (or 0ffffh), and a carry flag was generated.
+                    ; Any other value in BX will not generate a carry.
+        sbb bx,bx   ; This has the effect of moving the carry bit into the BX
+                    ; register. So, if the numbers were not equal, then the
+                    ; "sub bx,1" didn't generate a carry, so the result will
+                    ; be a 0 in the BX (numbers were not equal, result is
+                    ; false). If the original numbers on the stack were equal,
+                    ; though, then the carry bit was set and then copied
+                    ; into the BX register to act as our true flag.
+                    ; This may seem a bit cryptic, but it produces smaller
+                    ; code and runs faster than a bunch of conditional jumps
+                    ; and immediate loads would.
+        jmp next    ; Go do the next word.
 
 ; -------------------
 ; Peek and Poke
@@ -476,23 +476,23 @@ stack0  equ -256
 ; a given memory address, the way the Basic "peek" command does, and leaves
 ; it at the top of the stack.
         primitive '@',fetch
-        mov bx,word[bx]  ; Read the value in the memory address pointed to by
-                         ; the BX register and move that value directly into
-                         ; BX, replacing the address at the top of the stack.
-        jmp next         ; Go do the next word.
+        mov bx,word[bx]    ; Read the value in the memory address pointed to by
+                           ; the BX register and move that value directly into
+                           ; BX, replacing the address at the top of the stack.
+        jmp next           ; Go do the next word.
 
 ; ! - ( x addr -- ) store x at addr
 ; Similar to @, ! ("store") writes a value directly to a memory address, like
 ; the Basic "poke" command.
         primitive '!',store
-        pop word[bx]  ; Okay, this is a bit slick. All in one opcode, we pop
-                      ; the number that's 2nd from the top of the stack
-                      ; (i.e. "x" in the argument list) and send it directly
-                      ; to the memory address pointed to by BX (the address
-                      ; at the top of the stack).
-        pop bx        ; Pop whatever was 3rd from the top of the stack into
-                      ; the BX register to become the new TOS.
-        jmp next      ; Go do the next word.
+        pop word[bx]   ; Okay, this is a bit slick. All in one opcode, we pop
+                       ; the number that's 2nd from the top of the stack
+                       ; (i.e. "x" in the argument list) and send it directly
+                       ; to the memory address pointed to by BX (the address
+                       ; at the top of the stack).
+        pop bx         ; Pop whatever was 3rd from the top of the stack into
+                       ; the BX register to become the new TOS.
+        jmp next       ; Go do the next word.
 
 ; -------------------
 ; Inner Interpreter
@@ -552,21 +552,21 @@ zerob_z pop bx       ; Throw away the flag and move everything on the stack
 ; the number compiled into the dictionary immediately after the branch is
 ; the address of the word in the definition that we're branching to.
         primitive 'branch',branch
-        mov si,word[si]  ; The instruction pointer has already been
-                         ; incremented to point to the address immediately
-                         ; following the branch statement, which means it's
-                         ; pointing to where our branch-to address is
-                         ; stored. This opcode takes the value pointed to
-                         ; by the SI register and loads it directly into
-                         ; the SI, which is used as Forth's instruction
-                         ; pointer.
+        mov si,word[si]    ; The instruction pointer has already been
+                           ; incremented to point to the address immediately
+                           ; following the branch statement, which means it's
+                           ; pointing to where our branch-to address is
+                           ; stored. This opcode takes the value pointed to
+                           ; by the SI register and loads it directly into
+                           ; the SI, which is used as Forth's instruction
+                           ; pointer.
         jmp next
 
 ; execute - ( xt -- ) call the word at xt
         primitive 'execute',execute
-        mov di,bx     ; Move the jump-to address to the DI register.
-        pop bx        ; Pop the next number on the stack into the TOS.
-        jmp word[di]  ; Jump to the address pointed to by the DI register.
+        mov di,bx      ; Move the jump-to address to the DI register.
+        pop bx         ; Pop the next number on the stack into the TOS.
+        jmp word[di]   ; Jump to the address pointed to by the DI register.
 
 ; exit - ( -- ) return from the current word
         primitive 'exit',exit
@@ -773,59 +773,59 @@ acceptz jcxz acceptb  ; If the buffer is empty, beep at the user and go
 ; the separator between words. 999 times out of 1000,; this is going to
 ; be a space.
         primitive 'word',word
-        mov di,word[val_dp]           ; Load the dictionary pointer into DI.
-                                      ; This is going to be the address that
-                                      ; we copy the input word to. For the
-                                      ; sake of tradition, let's call this
-                                      ; scratchpad area the "pad".
-        push di                       ; Save the pad pointer to the stack.
-        mov dx,bx                     ; Copy the word separator to DX.
-        mov bx,word[val_t_i_b]        ; Load the address of the input buffer
-        mov cx,bx                     ; into BX, and save a copy to CX.
-        add bx,word[val_to_in]        ; Add the value of >in to the address
-                                      ; of tib to get a pointer into the
-                                      ; buffer.
-        add cx,word[val_number_t_i_b] ; Add the value of #tib to the address
-                                      ; of tib to get a pointer to the last
-                                      ; chr in the input buffer.
-wordf   cmp cx,bx                     ; Compare the current buffer pointer to
-                                      ; the end-of-buffer pointer.
-        je wordz                      ; If we've reached the end, jump.
-        mov al,byte[bx]               ; Get the next chr from the buffer
-        inc bx                        ; and increment the pointer.
-        cmp al,dl                     ; See if it's the separator.
-        je wordf                      ; If so, jump.
-wordc   inc di                        ; Increment our pad pointer. Note that
-                                      ; if this is our first time through the
-                                      ; routine, we're incrementing to the
-                                      ; 2nd address in the pad, leaving the
-                                      ; first byte of it empty.
-        mov byte[di],al               ; Write the new chr to the pad.
-        cmp cx,bx                     ; Have we reached the end of the
-                                      ; input buffer?
-        je wordz                      ; If so, jump.
-        mov al,byte[bx]               ; Get another byte from the input
-        inc bx                        ; buffer and increment the pointer.
-        cmp al,dl                     ; Is the new chr a separator?
-        jne wordc                     ; If not, go back for more.
-wordz   mov byte[di+1],32             ; Write a space at the end of the text
-                                      ; we've written so far to the pad.
-        mov ax,word[val_dp]           ; Load the address of the pad into AX.
-        xchg ax,di                    ; Swap the pad address with the pad
-        sub ax,di                     ; pointer then subtract to get the
-                                      ; length of the text in the pad.
-                                      ; The result goes into AX, leaving the
-                                      ; pad address in DI.
-        mov byte[di],al               ; Save the length byte into the first
-                                      ; byte of the pad.
-        sub bx,word[val_t_i_b]        ; Subtract the base address of the
-                                      ; input buffer from the pointer value
-                                      ; to get the new value of >in...
-        mov word[val_to_in],bx        ; ...then save it to its variable.
-        pop bx                        ; Pop the value of the pad address
-                                      ; that we saved earlier back out to
-                                      ; the top of the stack as our return
-                                      ; value.
+        mov di,word[val_dp]             ; Load the dictionary pointer into DI.
+                                        ; This is going to be the address that
+                                        ; we copy the input word to. For the
+                                        ; sake of tradition, let's call this
+                                        ; scratchpad area the "pad".
+        push di                         ; Save the pad pointer to the stack.
+        mov dx,bx                       ; Copy the word separator to DX.
+        mov bx,word[val_t_i_b]          ; Load the address of the input buffer
+        mov cx,bx                       ; into BX, and save a copy to CX.
+        add bx,word[val_to_in]          ; Add the value of >in to the address
+                                        ; of tib to get a pointer into the
+                                        ; buffer.
+        add cx,word[val_number_t_i_b]   ; Add the value of #tib to the address
+                                        ; of tib to get a pointer to the last
+                                        ; chr in the input buffer.
+wordf   cmp cx,bx                       ; Compare the current buffer pointer to
+                                        ; the end-of-buffer pointer.
+        je wordz                        ; If we've reached the end, jump.
+        mov al,byte[bx]                 ; Get the next chr from the buffer
+        inc bx                          ; and increment the pointer.
+        cmp al,dl                       ; See if it's the separator.
+        je wordf                        ; If so, jump.
+wordc   inc di                          ; Increment our pad pointer. Note that
+                                        ; if this is our first time through the
+                                        ; routine, we're incrementing to the
+                                        ; 2nd address in the pad, leaving the
+                                        ; first byte of it empty.
+        mov byte[di],al                 ; Write the new chr to the pad.
+        cmp cx,bx                       ; Have we reached the end of the
+                                        ; input buffer?
+        je wordz                        ; If so, jump.
+        mov al,byte[bx]                 ; Get another byte from the input
+        inc bx                          ; buffer and increment the pointer.
+        cmp al,dl                       ; Is the new chr a separator?
+        jne wordc                       ; If not, go back for more.
+wordz   mov byte[di+1],32               ; Write a space at the end of the text
+                                        ; we've written so far to the pad.
+        mov ax,word[val_dp]             ; Load the address of the pad into AX.
+        xchg ax,di                      ; Swap the pad address with the pad
+        sub ax,di                       ; pointer then subtract to get the
+                                        ; length of the text in the pad.
+                                        ; The result goes into EAX, leaving the
+                                        ; pad address in EDI.
+        mov byte[di],al                 ; Save the length byte into the first
+                                        ; byte of the pad.
+        sub bx,word[val_t_i_b]          ; Subtract the base address of the
+                                        ; input buffer from the pointer value
+                                        ; to get the new value of >in...
+        mov word[val_to_in],bx          ; ...then save it to its variable.
+        pop bx                          ; Pop the value of the pad address
+                                        ; that we saved earlier back out to
+                                        ; the top of the stack as our return
+                                        ; value.
         jmp next
 
 ; emit - ( char -- ) display char on the terminal
@@ -858,74 +858,74 @@ outchar xchg ax,dx  ; This headerless routine does an MS-DOS Int 21h call,
 ;   flag =  1, addr2 = call address   --> word is immediate
 ;   flag = -1, addr2 = call address   --> word is not immediate
         primitive 'find',find
-        mov di,val_last    ; Get the address of the link field of the last
-                           ; word in the dictionary. Put it in DI.
-findl   push di            ; Save the link field pointer.
-        push bx            ; Save the address of the name we're looking for.
-        mov cl,byte[bx]    ; Copy the length of the string into CL
-        mov ch,0           ; Clear CH to make a 16 bit counter.
-        inc cx             ; Increment the counter.
-findc   mov al,byte[di+2]  ; Get the length byte of whatever word in the
-                           ; dictionary we're currently looking at.
-        and al,07Fh        ; Mask off the immediate bit.
-        cmp al,byte[bx]    ; Compare it with the length of the string.
-        je findm           ; If they're the same, jump.
-        pop bx             ; Nope, can't be the same if the lengths are
-        pop di             ; different. Pop the saved values back to regs.
-        mov di,word[di]    ; Get the next link address.
-        test di,di         ; See if it's zero. If it's not, then we've not
-        jne findl          ; hit the end of the dictionary yet. Then jump
-                           ; back and check the next word in the dictionary.
-findnf  push bx            ; End of dictionary. Word wasn't found. Push the
-                           ; string address to the stack.
-        xor bx,bx          ; Clear the BX register (make a "false" flag).
-        jmp next           ; Return to caller.
-findm   inc di             ; The lengths match, but do the chrs? Increment
-                           ; the link field pointer. (That may sound weird,
-                           ; especially on the first time through this loop.
-                           ; But remember that, earlier in the loop, we
-                           ; loaded the length byte out the dictionary by an
-                           ; indirect reference to DI+2. We'll do that again
-                           ; in a moment, so what in effect we're actually
-                           ; doing here is incrementing what's now going to
-                           ; be treated as a string pointer for the name in
-                           ; the dictionary as we compare the characters
-                           ; in the strings.)
-        inc bx             ; Increment the pointer to the string we're
-                           ; checking.
-        loop findc         ; Decrements the counter in CX and, if it's not
-                           ; zero yet, loops back. The same code that started
-                           ; out comparing the length bytes will go through
+        mov di,val_last       ; Get the address of the link field of the last
+                              ; word in the dictionary. Put it in DI.
+findl   push di               ; Save the link field pointer.
+        push bx               ; Save the address of the name we're looking for.
+        mov cl,byte[bx]       ; Copy the length of the string into CL
+        mov ch,0              ; Clear CH to make a 16 bit counter.
+        inc cx                ; Increment the counter.
+findc   mov al,byte[di+2]     ; Get the length byte of whatever word in the
+                              ; dictionary we're currently looking at.
+        and al,07Fh           ; Mask off the immediate bit.
+        cmp al,byte[bx]       ; Compare it with the length of the string.
+        je findm              ; If they're the same, jump.
+        pop bx                ; Nope, can't be the same if the lengths are
+        pop di                ; different. Pop the saved values back to regs.
+        mov di,word[di]       ; Get the next link address.
+        test di,di            ; See if it's zero. If it's not, then we've not
+        jne findl             ; hit the end of the dictionary yet. Then jump
+                              ; back and check the next word in the dictionary.
+findnf  push bx               ; End of dictionary. Word wasn't found. Push the
+                              ; string address to the stack.
+        xor bx,bx             ; Clear the BX register (make a "false" flag).
+        jmp next              ; Return to caller.
+findm   inc di                ; The lengths match, but do the chrs? Increment
+                              ; the link field pointer. (That may sound weird,
+                              ; especially on the first time through this loop.
+                              ; But remember that, earlier in the loop, we
+                              ; loaded the length byte out the dictionary by an
+                              ; indirect reference to DI+2. We'll do that again
+                              ; in a moment, so what in effect we're actually
+                              ; doing here is incrementing what's now going to
+                              ; be treated as a string pointer for the name in
+                              ; the dictionary as we compare the characters
+                              ; in the strings.)
+        inc bx                ; Increment the pointer to the string we're
+                              ; checking.
+        loop findc            ; Decrements the counter in CX and, if it's not
+                              ; zero yet, loops back. The same code that started
+                              ; out comparing the length bytes will go through
                            ; and compare the characters in the string with
-                           ; the chrs in the dictionary name we're pointing
-                           ; at.
-        pop bx             ; If we got here, then the strings match. The
-                           ; word is in the dictionary. Pop the string's
-                           ; starting address and throw it away. We don't
-                           ; need it now that we know we're looking at a
-                           ; defined word.
-        pop di             ; Restore the link field address for the dictionary
-                           ; word whose name we just looked at.
-        mov bx,1           ; Put a 1 at the top of the stack.
-        inc di             ; Increment the pointer past the link field to the
-        inc di             ; name field.
-        mov al,byte[di]    ; Get the length of the word's name.
-        test al,080h       ; See if it's an immediate.
-        jne findi          ; "test" basically performs an AND without
-                           ; actually changing the register. If the
-                           ; immediate bit is set, we'll have a non-zero
-                           ; result and we'll skip the next instruction,
-                           ; leaving a 1 in BX to represent that we found
-                           ; an immediate word.
-        neg bx             ; But if it's not an immediate word, we fall
-                           ; through and generate a -1 instead to get the
-                           ; flag for a non-immediate word.
-findi   and ax,31          ; Mask off all but the valid part of the name's
-                           ; length byte.
-        add di,ax          ; Add the length to the name field address then
-        inc di             ; add 1 to get the address of the code field.
-        push di            ; Push the CFA onto the stack.
-        jmp next           ; We're done.
+                              ; the chrs in the dictionary name we're pointing
+                              ; at.
+        pop bx                ; If we got here, then the strings match. The
+                              ; word is in the dictionary. Pop the string's
+                              ; starting address and throw it away. We don't
+                              ; need it now that we know we're looking at a
+                              ; defined word.
+        pop di                ; Restore the link field address for the dictionary
+                              ; word whose name we just looked at.
+        mov bx,1              ; Put a 1 at the top of the stack.
+        inc di                ; Increment the pointer past the link field to the
+        inc di                ; name field.
+        mov al,byte[di]       ; Get the length of the word's name.
+        test al,080h          ; See if it's an immediate.
+        jne findi             ; "test" basically performs an AND without
+                              ; actually changing the register. If the
+                              ; immediate bit is set, we'll have a non-zero
+                              ; result and we'll skip the next instruction,
+                              ; leaving a 1 in BX to represent that we found
+                              ; an immediate word.
+        neg bx                ; But if it's not an immediate word, we fall
+                              ; through and generate a -1 instead to get the
+                              ; flag for a non-immediate word.
+findi   and ax,31             ; Mask off all but the valid part of the name's
+                              ; length byte.
+        add di,ax             ; Add the length to the name field address then
+        inc di                ; add 1 to get the address of the code field.
+        push di               ; Push the CFA onto the stack.
+        jmp next              ; We're done.
 
 ; -----------------------
 ; Colon Definition
@@ -1075,28 +1075,28 @@ dovar   push bx             ; Push the stack to make room for the new value
 ; Somewhat like the word DOES>, which is used in a similar manner to define
 ; run-time code in terms of Forth words.
         primitive '(;code)',do_semi_code
-        mov di,word[val_last] ; Get the LFA of the last word in dictionary
-                              ; (i.e. the word we're currently in the middle
-                              ; of compiling) and put it in DI. 
-        mov al,byte[di+2]     ; Get the length byte from the name field.
-        and ax,31             ; Mask off the immediate bit and leave only
-                              ; the 5-bit integer length.
-        add di,ax             ; Add the length to the pointer. If we add 3
-                              ; to the value in DI at this point, we'll
-                              ; have a pointer to the code field.
-        mov word[di+3],si     ; Store the current value of the instruction
-                              ; pointer into the code field. That value is
-                              ; going to point to whatever follows (;code) in
-                              ; the word being compiled, which in the case
-                              ; of (;code) had better be assembly code.
-        mov si,word[bp]       ; Okay, we just did something funky with the
-                              ; instruction pointer; now we have to fix it.
-                              ; Directly load into the instruction pointer
-                              ; the value that's currently at the top of
-                              ; the return stack.
-        inc bp                ; Then manually increment the return stack
-        inc bp                ; pointer.
-        jmp next              ; Done. Go do another word.
+        mov di,word[val_last]   ; Get the LFA of the last word in dictionary
+                                ; (i.e. the word we're currently in the middle
+                                ; of compiling) and put it in DI. 
+        mov al,byte[di+2]       ; Get the length byte from the name field.
+        and ax,31               ; Mask off the immediate bit and leave only
+                                ; the 5-bit integer length.
+        add di,ax               ; Add the length to the pointer. If we add 3
+                                ; to the value in DI at this point, we'll
+                                ; have a pointer to the code field.
+        mov word[di+3],si       ; Store the current value of the instruction
+                                ; pointer into the code field. That value is
+                                ; going to point to whatever follows (;code) in
+                                ; the word being compiled, which in the case
+                                ; of (;code) had better be assembly code.
+        mov si,word[bp]         ; Okay, we just did something funky with the
+                                ; instruction pointer; now we have to fix it.
+                                ; Directly load into the instruction pointer
+                                ; the value that's currently at the top of
+                                ; the return stack.
+        inc bp                  ; Then manually increment the return stack
+        inc bp                  ; pointer.
+        jmp next                ; Done. Go do another word.
 
 ; -----------------------
 ; Constants
