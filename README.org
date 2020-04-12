@@ -33,13 +33,15 @@ kt97679 ported it to 32-bit linux code. Sample session:
 #+end_example
 * Makefile
 #+begin_src makefile -i :tangle Makefile :comments link
-all: itsy-linux
+all: itsy-linux msdos/itsy.com
 
 itsy-linux: itsy-linux.asm
 	nasm itsy-linux.asm -fbin -l itsy-linux.lst -o itsy-linux
 	chmod +x itsy-linux
+msdos/itsy.com: msdos/itsy.asm
+	nasm msdos/itsy.asm -fbin -l msdos/itsy.lst -o msdos/itsy.com
 clean:
-	rm itsy-linux.lst itsy-linux
+	rm -f itsy-linux.lst itsy-linux msdos/itsy.lst msdos/itsy.com
 #+end_src
 * itsy-linux.asm
 #+begin_src asm :tangle itsy-linux.asm :comments link
