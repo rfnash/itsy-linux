@@ -1,3 +1,4 @@
+# [[file:~/ghq/github.com/rfnash/itsy-linux/README.org::*Makefile][Makefile:1]]
 all: itsy-linux
 
 itsy-linux: itsy-linux.asm
@@ -5,3 +6,4 @@ itsy-linux: itsy-linux.asm
 	chmod +x itsy-linux
 clean:
 	rm itsy-linux.lst itsy-linux
+# Makefile:1 ends here

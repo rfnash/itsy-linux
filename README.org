@@ -32,7 +32,7 @@ kt97679 ported it to 32-bit linux code. Sample session:
   $
 #+end_example
 * Makefile
-#+begin_src makefile -i :tangle Makefile
+#+begin_src makefile -i :tangle Makefile :comments link
 all: itsy-linux
 
 itsy-linux: itsy-linux.asm
